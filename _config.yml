@@ -1,12 +1,9 @@
 # Site settings
 title: RPi Tinkering
-email: philip.dekeulenaer@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   A blog of my experiences, good and bad, with the Raspberry Pi and the collection of hobby projects it enables
   Think music streaming, python learning, webserver building,...
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://yourdomain.com" # the base hostname & protocol for your site
-twitter_username: pdekeulenaer
 github_username:  pdekeulenaer
 
 # Build settings
