@@ -1,0 +1,442 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Temperature Monitor &#8211; Tinkering with an RPi</title>
+<meta name="description" content="Tutorial to setup a webapp monitoring your temperature in your home, using a Raspberry Pi and a temperature sensor.">
+<meta name="keywords" content="Raspberry-Pi, python, temperature-sensor">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Temperature Monitor">
+<meta name="twitter:description" content="Tutorial to setup a webapp monitoring your temperature in your home, using a Raspberry Pi and a temperature sensor.">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://pdekeulenaer.github.io/images/site-logo.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Temperature Monitor">
+<meta property="og:description" content="Tutorial to setup a webapp monitoring your temperature in your home, using a Raspberry Pi and a temperature sensor.">
+<meta property="og:url" content="http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/">
+<meta property="og:site_name" content="Tinkering with an RPi">
+
+
+
+
+
+<link rel="canonical" href="http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/">
+<link href="http://pdekeulenaer.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="Tinkering with an RPi Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://pdekeulenaer.github.io/assets/css/main.css">
+<!-- Webfonts -->
+<script src="//use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="http://pdekeulenaer.github.io/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="http://pdekeulenaer.github.io/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://pdekeulenaer.github.io/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://pdekeulenaer.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://pdekeulenaer.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://pdekeulenaer.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://pdekeulenaer.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://pdekeulenaer.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://pdekeulenaer.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav">
+	    <ul>
+      
+		    
+		        
+		    
+		    <li><a href="http://pdekeulenaer.github.io/" >Home</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://pdekeulenaer.github.io/tutorials/" >Tutorials</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://pdekeulenaer.github.io/knowledge/" >Knowledge</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://pdekeulenaer.github.io/blog/" >Blog</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://pdekeulenaer.github.io/about/" >About</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<div class="js-menu-screen menu-screen"></div>
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <span class="entry-tags"><a href="http://pdekeulenaer.github.io/tags/#Raspberry-Pi" title="Pages tagged Raspberry-Pi">Raspberry-Pi</a>&nbsp;&bull;&nbsp;<a href="http://pdekeulenaer.github.io/tags/#python" title="Pages tagged python">python</a>&nbsp;&bull;&nbsp;<a href="http://pdekeulenaer.github.io/tags/#temperature-sensor" title="Pages tagged temperature-sensor">temperature-sensor</a></span>
+        
+          <h1 class="entry-title">Temperature Monitor</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+        
+          <img src="http://pdekeulenaer.github.io/images/bio-photo.jpg" class="bio-photo" alt="Philip De Keulenaer bio photo"></a>
+        
+        <span class="author vcard">By <span class="fn">Philip De Keulenaer</span></span>
+        <span class="entry-date date published"><time datetime="2015-02-28T00:00:00+01:00"><i class="fa fa-calendar-o"></i> February 28, 2015</time></span>
+        
+        
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Raspberry-Pi,python,temperature-sensor&amp;text=Temperature%20Monitor&amp;url=http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+        
+      </footer>
+      <div class="entry-content">
+        <p>One of the simplest things you can do with a Raspberry 
+Pi is to build a temperature sensor. Using a breadboard, a few wires and a resistor you can hook your sensor up and read it conveniently through Python (or any other language of your choice). It was one of the first things I did with my Rpi, eventually turning it into a web-app that displays the current temperature and a weekly/daily history as well. This article explains the different steps involved.</p>
+
+<ol>
+  <li>Hard- and soft-ware setup</li>
+  <li>Hooking up the temperature sensor</li>
+  <li>Making a simple temperature reader</li>
+  <li>Persisting datapoints</li>
+  <li>Rendering a webapp using bootstrap and web.py</li>
+</ol>
+
+<h3 id="hardware-and-software-setup">Hardware and Software Setup</h3>
+<p>Obviously you will need a <strong>Raspberry Pi</strong>, a <strong>temperature sensor</strong> (I used the DS18B20), a <strong>breadboard</strong> and some wires and resistors (a 4.7kΩ resitor, which usually ships with the temperature sensor)</p>
+
+<p>On the software side we will develop everything in <strong>Python 2.7</strong>, using the simple <strong>web.py</strong> framework to develop &amp; serve the webapp, and <strong>sqlite</strong> for the database storage.</p>
+
+<h3 id="hooking-up-the-temperature-sensor">Hooking up the temperature sensor</h3>
+<p>To hook up the sensor I gladly refer you to one of the many online tutorials, for example this one at <a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware">adafruit</a> or check the tutorial from <a href="https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/temperature/#step-two">cambridge</a></p>
+
+<h3 id="making-a-simple-reader">Making a simple reader</h3>
+<p>First, the Raspberry Pi needs to learn about the new sensor. Run the following commands to add the Raspberry pi’s w1-GPIO and w1-Therm modules to the linux kernel, so that we can interact with the pins on the RPi and the sensor connected to them. </p>
+
+<pre><code>&gt; sudo modprobe w1-gpio
+&gt; sudo modprobe w1-therm
+</code></pre>
+
+<p><em>Note: You will need to run these every time you reboot your Rpi. To prevent that, you can add the w1-gpio and w1-therm moduels to the /etc/module file</em></p>
+
+<p>Now the sensor will be registered and it will be listed as a device, meaning we can read the value. Run the following command</p>
+
+<pre><code>&gt; ls /sys/bus/w1/devices/
+</code></pre>
+
+<p>This will list the available devices that we just enabled by loading the kernel modules. There should be a directory like 28-XXXXXXXXX (it’s different for each sensor). This is the device directory that contains a file ‘w1_slave’. This file will contain the latest temperature measurement. Let;s make sure it works by running</p>
+
+<pre><code>&gt; cat /sys/bus/w1/devices/28-XXXXXXXXX/w1_slave 
+</code></pre>
+
+<p>You should see something like</p>
+
+<pre><code>67 01 4b 46 7f ff 09 10 3b : crc=3b YES
+67 01 4b 46 7f ff 09 10 3b t=21358
+</code></pre>
+
+<p>The last 5 characters are the interesting ones, they represent the temperature with 3 digits of precision, in degrees celsius.</p>
+
+<p>Congratulations, you now know the temperature in your home!</p>
+
+<h3 id="reading-the-value-from-python">Reading the value from python</h3>
+
+<p>Ofcourse reading it through a terminal is far too primitive, we want to view it on the web! What better programming language to do this in, than the language of the pi, namely <strong>python</strong></p>
+
+<p>The initial code is very simple, we will replicate what we just did but only in python. FIrst we locate the file, then we open it and find the right characters. Then we convert it into a floating point number with the required precision, and we are done.</p>
+
+<p>Let’s start by storing the device id in a variable</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">deviceid</span> <span class="o">=</span> <span class="s">&#39;28-XXXXXXXXXX&#39;</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;/sys/bus/w1/devices/</span><span class="si">%s</span><span class="s">/w1_slave&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">deviceid</span><span class="p">)</span></code></pre></div>
+
+<p>Then we can use the native file IO of python</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">69</span><span class="p">)</span> 
+<span class="n">tinput</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tinput</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+
+<p>This code opens the file, looks for the right position (I hardcoded the byte number 69 to make the code execute a tiny bit faster). Then we read the next 5 bytes (which equal the five digits of the temperature), convert it to a floating point number and then divide it by 1000 to account for the precision. Finally we can close the file.</p>
+
+<p>Putting it all together in a simple script, gives the following</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">deviceid</span> <span class="o">=</span> <span class="s">&#39;28-000005aa8d2c&#39;</span>
+
+<span class="k">def</span> <span class="nf">read</span><span class="p">():</span>	
+	<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">((</span><span class="s">&#39;/sys/bus/w1/devices/</span><span class="si">%s</span><span class="s">/w1_slave&#39;</span> <span class="o">%</span> <span class="n">deviceid</span><span class="p">))</span>
+	<span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">69</span><span class="p">)</span>
+	<span class="n">tempvalue</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+	<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">tempvalue</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span>
+	
+<span class="k">print</span> <span class="s">&quot;Currently the temperature is </span><span class="si">%.3f</span><span class="s"> degrees celsius&quot;</span> <span class="o">%</span> <span class="n">read</span><span class="p">()</span></code></pre></div>
+
+<p>Now run it in your terminal</p>
+
+<pre><code>&gt; python temperature_reader.py   
+</code></pre>
+
+<p>And you will see something like</p>
+
+<pre><code>Currently the temperature is 22.123 degrees celsius
+</code></pre>
+
+<h3 id="pushing-data-to-a-sqlite-database">Pushing data to a SQlite database</h3>
+
+<p>To store our data we will use a SQLite database, because it’s nice and compact, and perfect for our needs. As the name suggests it uses SQL, and it can be easily controlled from in python. </p>
+
+<p>First let’s setup the database. We will define a table called <em>recordings</em>. </p>
+
+<p>Run the command <em>sqlite3 my.db</em> to open the sqlite shell. If this doesn’t work try installing it through your favorite package manager. </p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="s1">&#39;recordings&#39;</span> 
+	<span class="p">(</span><span class="s1">&#39;id&#39;</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+	 <span class="s1">&#39;time&#39;</span> <span class="n">DATETIME</span> <span class="k">DEFAULT</span> <span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+	 <span class="s1">&#39;value&#39;</span> <span class="nb">REAL</span>
+	<span class="p">)</span></code></pre></div>
+
+<p>This will give each record an ID (incrementing automatically), a timestamp of the time of uploading, and the value which we will have to specify.</p>
+
+<p>Let’s expand our python script to push the measurements to our database.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sqlite3</span>
+
+<span class="n">dbpath</span> <span class="o">=</span> <span class="s">&#39;path/to/my/db.db&#39;</span>
+
+<span class="k">def</span> <span class="nf">storevalue</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+	<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbpath</span><span class="p">)</span>
+	<span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+	<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;INSERT INTO &#39;recordings&#39; VALUES (Null,Null,</span><span class="si">%f</span><span class="s">);&quot;</span> <span class="o">%</span> <span class="n">value</span>
+	<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+	<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+
+<p>This function opens a connection to the database, creates a cursor object which is what allows us to interact with the database. Then we execute a simple INSERT query. The two Null values will force the <em>id</em> and <em>time</em> fields to use the default values.</p>
+
+<p>We can now bring the two functions together.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">t</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
+<span class="n">storevalue</span><span class="p">(</span><span class="n">t</span><span class="p">)</span></code></pre></div>
+
+<p>Because we don’t want to keep running this, we can simply create an infinite loop and wait 1 minute within the loop. Alternatively you could configure a cronjob to run this script every period you like. I went for the all-python solution.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+
+<span class="n">dbpath</span> <span class="o">=</span> <span class="s">&#39;path/to/my/db.db&#39;</span>
+<span class="n">deviceid</span> <span class="o">=</span> <span class="s">&#39;28-000005aa8d2c&#39;</span>
+
+<span class="k">def</span> <span class="nf">storevalue</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+	<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbpath</span><span class="p">)</span>
+	<span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+	<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;INSERT INTO &#39;recordings&#39; VALUES (Null,Null,</span><span class="si">%f</span><span class="s">);&quot;</span> <span class="o">%</span> <span class="n">value</span>
+	<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+	<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">read</span><span class="p">():</span>	
+	<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">((</span><span class="s">&#39;/sys/bus/w1/devices/</span><span class="si">%s</span><span class="s">/w1_slave&#39;</span> <span class="o">%</span> <span class="n">deviceid</span><span class="p">))</span>
+	<span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">69</span><span class="p">)</span>
+	<span class="n">tempvalue</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+	<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">tempvalue</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span>
+
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+	<span class="n">t</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
+	<span class="n">storevalue</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+	<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span></code></pre></div>
+
+<p>Store it in <em>infinite.py</em>. If you are using the rpi headless (i.e. through SSH from another computer), you may want to use the <strong>nohup</strong> command to launch this python process in the background. This means you can still use your terminal to do other stuff, and the process will remain active even when you close your connection.</p>
+
+<pre><code>&gt; nohup python infinite.py &amp;  
+</code></pre>
+
+<p><em>Note we can also add a dbread method to the temperaturesensor module, which we can use later to make our web app faster</em></p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">dbread</span><span class="p">():</span>
+	<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbpath</span><span class="p">)</span>
+	<span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+	<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT &#39;value&#39; FROM &#39;recordings&#39; ORDER BY id DESC LIMIT 1);&quot;</span> <span class="o">%</span> <span class="n">value</span>
+	<span class="n">value</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+	<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">value</span></code></pre></div>
+
+<p>This will request all the values of each record in the database, ordered by ‘id’ in descending order, and only the first result that he finds will be returned. Since the ‘id’ automatically increments, this is guaranteed to return the most recent measurement.</p>
+
+<h3 id="serving-data-to-the-web">Serving data to the web</h3>
+<p>To publish our information to the web, we will first need a web framework. I use <strong>web.py</strong> because it is fast, lightweight, and it leaves you with a lot more control than other more elaborate frameworks.</p>
+
+<p>You can install web.py by following the instructions <a href="http://webpy.org/install" title="online">online</a>, yet these below should do the trick.</p>
+
+<pre><code>&gt; wget http://webpy.org/static/web/py-0.37.tar.gz
+&gt; tar -xvf py-0.37.tar.gz webpy/
+&gt; cd webpy/
+&gt; sudo python setup.py install
+</code></pre>
+
+<p>Although web.py has a solid template engine behind it, you don’t actually need it to get started.</p>
+
+<p>Open a new python script, let’s call it <em>main.py</em></p>
+
+<p>In here we need to do a few things</p>
+
+<ul>
+  <li>Serve web-requests that are incoming with web.py</li>
+  <li>Accessing the latest temperature reading</li>
+  <li>Displaying temperature to the user</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">web</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+	<span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;index&#39;</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">index</span><span class="p">:</span>
+	<span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s">&quot;My temperature webpage&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+	<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+	<span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></code></pre></div>
+
+<p>This is the standard web.py code snippet to get started. First the <em>urls</em> indicates a class that will serve a certain url. If we land at the homepage (which is specified as /), we will use the index class to serve this page.</p>
+
+<p>The index class itself is defined below. It implements a GET method, this is one of the HTTP request types. If you don’t know what all that means, that is a topic for another tutorial. For now, let’s just assume that the GET request is what we need (which is the case), and worry about the rest later.</p>
+
+<p>So when the server gets a GET request on the base url (ie on ‘www.mypage.com/’), the output of the ‘GET’ method in the class ‘index’ will be returned.</p>
+
+<p>The bottom 3 lines make sure that we start the web application if this file is executed as the main file.</p>
+
+<p>Now we need to actually get our temperature in here. Remember the ‘read()’ and ‘storevalue()’ functions we defind earlier? Let’s dig up that file and call it <em>temperaturesensor.py</em>.</p>
+
+<p>Now we can use the functionality we already made by importing the sensor module</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">web</span>
+<span class="kn">import</span> <span class="nn">temperaturesensor</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+	<span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;index&#39;</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">index</span><span class="p">:</span>
+	<span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">t</span> <span class="o">=</span> <span class="n">temperaturesensor</span><span class="o">.</span><span class="n">dbread</span><span class="p">()</span>
+		<span class="k">return</span> <span class="s">&quot;The temperature is currently </span><span class="si">%.3f</span><span class="s"> degrees celsius&quot;</span> <span class="o">%</span> <span class="n">t</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+	<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+	<span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></code></pre></div>
+
+<p>Note how I use the dbread() rather than the regular read() method. I do this because the file IO on the Raspberry Pi can be quite slow (lead time of 1-2 seconds), and in my experience the database read goes a tad faster. Additionally, it proves that you can use the database as an interaction point between different python processes running on the Rpi, which is a useful concept to build further applications that use sensor measurements etc.</p>
+
+<h3 id="beam-in-the-majestic-glow-of-your-webpage">Beam in the majestic glow of your webpage</h3>
+<p>Now all that is left is actually running the website. In your terminal, execute the following line in the directory where you wrote  <em>main.py</em></p>
+
+<pre><code>&gt; sudo python main.py 8080
+</code></pre>
+
+<p>This will start a simple webserver, who runs your code, on the port 8080. Navigate to http://localhost:8080; and enjoy!</p>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="http://pdekeulenaer.github.io/blog/hello-world/" class="btn" title="Hello World">Previous</a>
+      
+      
+        <a href="http://pdekeulenaer.github.io/tutorials/audio-streaming/" class="btn" title="Audio Streaming over WiFi">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2015 Philip De Keulenaer. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/so-simple/" rel="nofollow">So Simple Theme</a>.</span>
+<div class="social-icons">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+  <a href="http://pdekeulenaer.github.io/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'http://pdekeulenaer.github.io';
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://pdekeulenaer.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://pdekeulenaer.github.io/assets/js/scripts.min.js"></script>
+
+
+	        
+
+</body>
+</html>
