@@ -2,13 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 <title type="text">Tinkering with an RPi</title>
 <generator uri="https://github.com/jekyll/jekyll">Jekyll</generator>
-<link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
-<link rel="alternate" type="text/html" href="http://localhost:4000" />
-<updated>2015-03-28T16:58:55+01:00</updated>
-<id>http://localhost:4000/</id>
+<link rel="self" type="application/atom+xml" href="http://pdekeulenaer.github.io/feed.xml" />
+<link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io" />
+<updated>2015-03-28T17:11:56+01:00</updated>
+<id>http://pdekeulenaer.github.io/</id>
 <author>
   <name>Philip De Keulenaer</name>
-  <uri>http://localhost:4000/</uri>
+  <uri>http://pdekeulenaer.github.io/</uri>
   <email>philip.dekeulenaer@gmail.com</email>
 </author>
 
@@ -17,13 +17,13 @@
 
 <entry>
   <title type="html"><![CDATA[Playing back audio on Raspberry Pi using alsaudio]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/" />
-  <id>http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/tutorials/Playing-back-audiostream-on-raspberry-pi/" />
+  <id>http://pdekeulenaer.github.io/tutorials/Playing-back-audiostream-on-raspberry-pi</id>
   <published>2015-03-28T00:00:00+01:00</published>
   <updated>2015-03-28T00:00:00+01:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -352,7 +352,7 @@
     &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sendblock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;audio&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/&quot;&gt;Playing back audio on Raspberry Pi using alsaudio&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 28, 2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/tutorials/Playing-back-audiostream-on-raspberry-pi/&quot;&gt;Playing back audio on Raspberry Pi using alsaudio&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 28, 2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -361,13 +361,13 @@
 
 <entry>
   <title type="html"><![CDATA[Building a streaming service]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/tutorials/Client-server-connection/" />
-  <id>http://localhost:4000/tutorials/Client-server-connection</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/tutorials/Client-server-connection/" />
+  <id>http://pdekeulenaer.github.io/tutorials/Client-server-connection</id>
   <published>2015-03-21T00:00:00+01:00</published>
   <updated>2015-03-21T00:00:00+01:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -602,7 +602,7 @@ terminate received
 
 &lt;p&gt;In the next tutorial we will build a Queue to gather the input blocks, and use the &lt;code&gt;alsaudio&lt;/code&gt; library to play it on the RPi!&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/tutorials/Client-server-connection/&quot;&gt;Building a streaming service&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 21, 2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/tutorials/Client-server-connection/&quot;&gt;Building a streaming service&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 21, 2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -611,13 +611,13 @@ terminate received
 
 <entry>
   <title type="html"><![CDATA[Capture audio on windows 7 with python]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/tutorials/Capture-audio-on-windows-7-with-python/" />
-  <id>http://localhost:4000/tutorials/Capture-audio-on-windows-7-with-python</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/tutorials/Capture-audio-on-windows-7-with-python/" />
+  <id>http://pdekeulenaer.github.io/tutorials/Capture-audio-on-windows-7-with-python</id>
   <published>2015-03-14T00:00:00+01:00</published>
   <updated>2015-03-14T00:00:00+01:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -698,7 +698,7 @@ terminate received
 
 &lt;p&gt;Now you’re ready to test. Play some music (you won’t hear anything) and run the python script. Once it finishes you should see a file &lt;code&gt;output.wav&lt;/code&gt;. Now switch your audio device back to the normal speakers, and play the &lt;code&gt;output.wav&lt;/code&gt; file. You will now hear the music that you couldn’t hear before!&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/tutorials/Capture-audio-on-windows-7-with-python/&quot;&gt;Capture audio on windows 7 with python&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 14, 2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/tutorials/Capture-audio-on-windows-7-with-python/&quot;&gt;Capture audio on windows 7 with python&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 14, 2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -707,13 +707,13 @@ terminate received
 
 <entry>
   <title type="html"><![CDATA[Audio Streaming over WiFi]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/tutorials/audio-streaming/" />
-  <id>http://localhost:4000/tutorials/audio-streaming</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/tutorials/audio-streaming/" />
+  <id>http://pdekeulenaer.github.io/tutorials/audio-streaming</id>
   <published>2015-03-01T00:00:00+01:00</published>
   <updated>2015-03-01T00:00:00+01:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -735,7 +735,7 @@ terminate received
 &lt;hr /&gt;
 
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/tutorials/audio-streaming/&quot;&gt;Audio Streaming over WiFi&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 01, 2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/tutorials/audio-streaming/&quot;&gt;Audio Streaming over WiFi&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on March 01, 2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -744,13 +744,13 @@ terminate received
 
 <entry>
   <title type="html"><![CDATA[Temperature Monitor]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/tutorials/Rpi-temperature-sensor/" />
-  <id>http://localhost:4000/tutorials/Rpi-temperature-sensor</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/" />
+  <id>http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor</id>
   <published>2015-02-28T00:00:00+01:00</published>
   <updated>2015-02-28T00:00:00+01:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -1003,7 +1003,7 @@ Pi is to build a temperature sensor. Using a breadboard, a few wires and a resis
 
 &lt;p&gt;This will start a simple webserver, who runs your code, on the port 8080. Navigate to http://localhost:8080; and enjoy!&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/tutorials/Rpi-temperature-sensor/&quot;&gt;Temperature Monitor&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on February 28, 2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/&quot;&gt;Temperature Monitor&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on February 28, 2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -1012,13 +1012,13 @@ Pi is to build a temperature sensor. Using a breadboard, a few wires and a resis
 
 <entry>
   <title type="html"><![CDATA[Hello World]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/blog/hello-world/" />
-  <id>http://localhost:4000/blog/hello-world</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/blog/hello-world/" />
+  <id>http://pdekeulenaer.github.io/blog/hello-world</id>
   <published>2014-08-08T21:39:55+02:00</published>
   <updated>2014-08-08T21:39:55+02:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -1040,7 +1040,7 @@ To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; direc
 &lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;.&lt;/p&gt;
 
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/blog/hello-world/&quot;&gt;Hello World&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on August 08, 2014.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/blog/hello-world/&quot;&gt;Hello World&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on August 08, 2014.&lt;/p&gt;
   </content>
 </entry>
 
@@ -1049,13 +1049,13 @@ To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; direc
 
 <entry>
   <title type="html"><![CDATA[Hello World]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/blog/hello-world/" />
-  <id>http://localhost:4000/blog/hello-world</id>
+  <link rel="alternate" type="text/html" href="http://pdekeulenaer.github.io/blog/hello-world/" />
+  <id>http://pdekeulenaer.github.io/blog/hello-world</id>
   <published>2014-08-08T21:39:55+02:00</published>
   <updated>2014-08-08T21:39:55+02:00</updated>
   <author>
     <name>Philip De Keulenaer</name>
-    <uri>http://localhost:4000</uri>
+    <uri>http://pdekeulenaer.github.io</uri>
     <email>philip.dekeulenaer@gmail.com</email>
   </author>
   <content type="html">
@@ -1077,7 +1077,7 @@ To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; direc
 &lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;.&lt;/p&gt;
 
 
-    &lt;p&gt;&lt;a href=&quot;http://localhost:4000/blog/hello-world/&quot;&gt;Hello World&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://localhost:4000&quot;&gt;Tinkering with an RPi&lt;/a&gt; on August 08, 2014.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pdekeulenaer.github.io/blog/hello-world/&quot;&gt;Hello World&lt;/a&gt; was originally published by Philip De Keulenaer at &lt;a href=&quot;http://pdekeulenaer.github.io&quot;&gt;Tinkering with an RPi&lt;/a&gt; on August 08, 2014.&lt;/p&gt;
   </content>
 </entry>
 

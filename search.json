@@ -3,7 +3,7 @@
   
     {
       "title"			: "Playing back audio on Raspberry Pi using alsaudio",
-      "link"			: "http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/",
+      "link"			: "http://pdekeulenaer.github.io/tutorials/Playing-back-audiostream-on-raspberry-pi/",
       "excerpt"		: "Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable."
     }
   
@@ -11,7 +11,7 @@
   
     ,{
       "title"			: "Building a streaming service",
-      "link"			: "http://localhost:4000/tutorials/Client-server-connection/",
+      "link"			: "http://pdekeulenaer.github.io/tutorials/Client-server-connection/",
       "excerpt"		: "Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable."
     }
   
@@ -19,7 +19,7 @@
   
     ,{
       "title"			: "Capture audio on windows 7 with python",
-      "link"			: "http://localhost:4000/tutorials/Capture-audio-on-windows-7-with-python/",
+      "link"			: "http://pdekeulenaer.github.io/tutorials/Capture-audio-on-windows-7-with-python/",
       "excerpt"		: "Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable."
     }
   
@@ -27,7 +27,7 @@
   
     ,{
       "title"			: "Audio Streaming over WiFi",
-      "link"			: "http://localhost:4000/tutorials/audio-streaming/",
+      "link"			: "http://pdekeulenaer.github.io/tutorials/audio-streaming/",
       "excerpt"		: "Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable."
     }
   
@@ -35,7 +35,7 @@
   
     ,{
       "title"			: "Temperature Monitor",
-      "link"			: "http://localhost:4000/tutorials/Rpi-temperature-sensor/",
+      "link"			: "http://pdekeulenaer.github.io/tutorials/Rpi-temperature-sensor/",
       "excerpt"		: "Tutorial to setup a webapp monitoring your temperature in your home, using a Raspberry Pi and a temperature sensor."
     }
   
@@ -43,7 +43,7 @@
   
     ,{
       "title"			: "Hello World",
-      "link"			: "http://localhost:4000/blog/hello-world/",
+      "link"			: "http://pdekeulenaer.github.io/blog/hello-world/",
       "excerpt"		: ""
     }
   
@@ -51,7 +51,7 @@
   
     ,{
       "title"			: "Hello World",
-      "link"			: "http://localhost:4000/blog/hello-world/",
+      "link"			: "http://pdekeulenaer.github.io/blog/hello-world/",
       "excerpt"		: ""
     }
   
@@ -73,7 +73,7 @@
   
     ,{
       "title"			: "About the Jekyll Theme",
-      "link"			: "http://localhost:4000/about/",
+      "link"			: "http://pdekeulenaer.github.io/about/",
       "excerpt"		: "So Simple is a responsive Jekyll theme for your words and images."
     }
   
