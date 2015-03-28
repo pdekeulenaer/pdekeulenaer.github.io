@@ -1,0 +1,516 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Playing back audio on Raspberry Pi using alsaudio &#8211; Tinkering with an RPi</title>
+<meta name="description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+<meta name="keywords" content="Raspberry-Pi, python, audio-stream">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Playing back audio on Raspberry Pi using alsaudio">
+<meta name="twitter:description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/site-logo.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Playing back audio on Raspberry Pi using alsaudio">
+<meta property="og:description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+<meta property="og:url" content="http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/">
+<meta property="og:site_name" content="Tinkering with an RPi">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Tinkering with an RPi Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+<!-- Webfonts -->
+<script src="//use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="http://localhost:4000/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="http://localhost:4000/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://localhost:4000/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav">
+	    <ul>
+      
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/" >Home</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/tutorials/" >Tutorials</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/knowledge/" >Knowledge</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/blog/" >Blog</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/about/" >About</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<div class="js-menu-screen menu-screen"></div>
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <span class="entry-tags"><a href="http://localhost:4000/tags/#Raspberry-Pi" title="Pages tagged Raspberry-Pi">Raspberry-Pi</a>&nbsp;&bull;&nbsp;<a href="http://localhost:4000/tags/#python" title="Pages tagged python">python</a>&nbsp;&bull;&nbsp;<a href="http://localhost:4000/tags/#audio-stream" title="Pages tagged audio-stream">audio-stream</a></span>
+        
+          <h1 class="entry-title">Playing back audio on Raspberry Pi using alsaudio</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+        
+          <img src="http://localhost:4000/images/bio-photo.jpg" class="bio-photo" alt="Philip De Keulenaer bio photo"></a>
+        
+        <span class="author vcard">By <span class="fn">Philip De Keulenaer</span></span>
+        <span class="entry-date date published"><time datetime="2015-03-28T00:00:00+01:00"><i class="fa fa-calendar-o"></i> March 28, 2015</time></span>
+        
+        
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Raspberry-Pi,python,audio-stream&amp;text=Playing%20back%20audio%20on%20Raspberry%20Pi%20using%20alsaudio&amp;url=http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+        
+      </footer>
+      <div class="entry-content">
+        <p>In this third and final part we will close the loop (quite literally) on our audiostreamer. We will collect the incoming audio blocks, recompose them into a coherent music stream, and play them on the Raspberry Pi. Note that the RPi doesn’t have a speaker on board, so you will need to connect it to another sound output via the AUX jack, for this whole project to make any sense :-)</p>
+
+<h3 id="server-setup">Server setup</h3>
+<p>First, the server will use the <code>alsaudio</code> libraries to play back the sound. The key challenge is that the sound arrives in little packets, and we need to feed them to our audio player, as opposed to feeding it an entire audio file. Luckily <code>alsaudio</code> offers this functionality (<code>pyaudio</code> does too, but does not work properly on the RPi). </p>
+
+<p>Secondly, we need a way to buffer the incoming blocks of audio data so that we can ensure a smooth playback. For this we use an implementation of the <code>Queue</code> class.</p>
+
+<p>Finally we need to be able to accept incoming packages, for this we will alter the <code>StreamReceiver</code> class we built in the previous exercise.</p>
+
+<p>Note that we switch development environment to the RPi in this tutorial!</p>
+
+<h3 id="playing-music-with-alsaaudio">Playing music with alsaaudio</h3>
+<p>You can download and install alsaaudio from <a href="http://pyalsaaudio.sourceforge.net/index.html" title="the website">http://pyalsaaudio.sourceforge.net/index.html</a>. The package comes with a few useful examples to familiarize yourself with the library. It is a rather old, and rather underdeveloped, wrapper around the ALSA C library on Linux, yet it does the job.</p>
+
+<p>First, let’s play a sample wav file with a basic alsaaudio script.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">alsaaudio</span>
+<span class="kn">import</span> <span class="nn">wave</span>
+
+<span class="k">def</span> <span class="nf">setupalsa</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+	<span class="n">device</span><span class="o">.</span><span class="n">setchannels</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+	<span class="n">device</span><span class="o">.</span><span class="n">setrate</span><span class="p">(</span><span class="mi">44100</span><span class="p">)</span>
+	<span class="n">device</span><span class="o">.</span><span class="n">setformat</span><span class="p">(</span><span class="n">alsaaudio</span><span class="o">.</span><span class="n">PCM_FORMAT_S32_LE</span><span class="p">)</span>
+	<span class="n">device</span><span class="o">.</span><span class="n">setperiodsize</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">wf</span><span class="p">):</span>
+	<span class="n">data</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">readframes</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+	<span class="k">while</span> <span class="n">data</span><span class="p">:</span>
+		<span class="n">device</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+		<span class="n">data</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">readframes</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">device</span> <span class="o">=</span> <span class="n">alsaaudio</span><span class="o">.</span><span class="n">PCM</span><span class="p">(</span><span class="n">card</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
+	<span class="n">wf</span> <span class="o">=</span> <span class="n">wave</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;sample.wav&#39;</span><span class="p">,</span><span class="s">&#39;rb&#39;</span><span class="p">)</span>
+	<span class="n">play</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="n">wf</span><span class="p">)</span>
+	<span class="n">wf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+
+<p>In the <code>setupalsa</code> method we define the same parameters as we did for pyaudio in the previous tutorials, the naming conventions are just slightly different. Furthermore, we have to apply them to a <code>device</code>, we will get to that in a moment.</p>
+
+<p>The mechanics in the <code>play</code> method are very similar to how we read the audiostream. We simply treat the playback device as a stream to which we can write, so we can read a set of frames from a .wav file, and directly write it to the audio output.</p>
+
+<p>The <code>device</code> on which to play, is the default one, and can be accessed through the <code>alsaaudio.PCM()</code> method, as demonstrated in the main code. </p>
+
+<p>Note that we are not limited to reading the blocks from a wav file. We can use any type of source to read from. However, writing non-music to the audio output will generate a selection of unappealing white noise.</p>
+
+<p>All in all working with alsaaudio seems very straightforward.</p>
+
+<h3 id="collecting-incoming-blocks-in-a-queue">Collecting incoming blocks in a Queue</h3>
+<p>To make sure we can stream sound with minimum hickups in the playback, we will use a buffering mechanism. All incoming blocks will be temporarily buffered, before they are written to the audio output.</p>
+
+<p>That way we minimize the risk that we run out of music to play (for example due to a brief network delay).</p>
+
+<p>The ideal data structure for this is a <code>Queue</code>. The python <code>Queue</code> class is a synchronized class, meaning it is ideally suited for exchanging data between threads. Seeing how our Receiver and Music Playing process will be ran in separate threads, this is a nice additional feature to have.</p>
+
+<p>Our <code>Queue</code> needs to be FIFO (first in, first out). Luckily that is the standard implementation.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">StreamQ</span><span class="p">:</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span> <span class="c">#use a FIFO queue</span>
+	
+	<span class="k">def</span> <span class="nf">addblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">block</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+	
+	<span class="k">def</span> <span class="nf">nextblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">blocking</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">blocking</span><span class="p">)</span></code></pre></div>
+
+<p>We build a simple wrapper around the <code>Queue</code> class that allows us to add and remove blocks from the queue. Note the <code>nextblock()</code> method has a parameter <code>blocking</code>. By default the method will wait until a block is available, and then return it; however by overriding this parameter to False, you can return immediately, which could be useful in some cases.</p>
+
+<p>However our Queue is missing the buffer functionality. Since I don’t like making life more difficult than it already is, we will go for a simple polling-based approach to check if the queue has reached the desired buffer size.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">StreamQ</span><span class="p">:</span>
+	<span class="o">...</span>
+	<span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">BUFFER_SIZE</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+		<span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">qsize</span><span class="p">()</span>
+		
+		<span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">BUFFER_SIZE</span><span class="p">):</span>
+			<span class="k">print</span> <span class="s">&quot;Q: filling buffer&quot;</span>
+			<span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">qsize</span><span class="p">()</span>
+			<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span></code></pre></div>
+
+<p>If you now call the <code>StreamQ.buffer()</code> method, it will only exit once there are 100 buffers (i.e. blocks) in the queue. </p>
+
+<p>Note that this <strong>only makes sense in a multithreaded setup</strong> . If you have only 1 thread or process active, and it is stuck in the buffer loop, then there is no way it will ever exit as there is no process left to fill up the buffer. The implementation can still cause the program to hang, for example if you have 2 processes adding and consuming blocks to/from the queue at a fast enough pace.</p>
+
+<p>However, in our audiostreamer we will have 2 threads. One to add blocks and one to consume them; but the thread that consumes the blocks is also the one that waits for the buffer. Hence there is no risk of messing at this stage…</p>
+
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<p>Now we have a server to receive blocks (see previous exercise), a player that can read blocks from any source and write it to audio output, and a queue that can store and buffer blocks.</p>
+
+<p>Let’s alter the <code>StreamReceiver</code> we built earlier slightly, so it uses the new <code>StreamQ</code> we built.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">StreamReceiver</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span> <span class="c"># NEW</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">openconnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span><span class="mi">1234</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listener</span> <span class="o">=</span> <span class="n">Listener</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="n">authkey</span><span class="o">=</span><span class="s">&#39;abcdefg&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listener</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openconnection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serve</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">conn</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s">&#39;TERMINATE&#39;</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;terminate received&#39;</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">)</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">break</span>
+
+            <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+    <span class="c"># process incoming data</span>
+    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="c"># NEW</span>
+        <span class="k">return</span> <span class="s">&#39;OK&#39;</span></code></pre></div>
+
+<p>The only changes are in the <code>init</code> and <code>dispatch</code> method, where we now setup the queue, and write the block to the queue, rather than to the standard output like before.</p>
+
+<p>Next step is to make sure our audioplayer reads from the queue. I also reshuffled the code into a class, as it’s a bit neater.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AudioPlayer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setchannels</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setrate</span><span class="p">(</span><span class="mi">44100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setformat</span><span class="p">(</span><span class="n">alsaaudio</span><span class="o">.</span><span class="n">PCM_FORMAT_S32_LE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setperiodsize</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">nextblock</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">nextblock</span><span class="p">()</span></code></pre></div>
+
+<p>Now, finally, piecing it all together gives us the following code on the server side</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Listener</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span>
+<span class="kn">import</span> <span class="nn">alsaaudio</span><span class="o">,</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">StreamReceiver</span><span class="p">:</span>
+	<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">StreamQ</span><span class="p">:</span>
+	<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">AudioPlayer</span><span class="p">:</span>
+	<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">startserver</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">StreamReceiver</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c"># initialize audio output</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">alsaaudio</span><span class="o">.</span><span class="n">PCM</span><span class="p">(</span><span class="n">card</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">AudioPlayer</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">StreamQ</span><span class="p">()</span>
+
+	<span class="c"># start server process</span>
+    <span class="n">serverprocess</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">startserver</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,))</span>
+    <span class="n">serverprocess</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c"># fill buffer of queue with 50 blocks</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="c"># start playing</span>
+    <span class="n">player</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">q</span><span class="p">)</span></code></pre></div>
+
+<h3 id="full-source-code">Full source code</h3>
+
+<h4 id="server">Server</h4>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Listener</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span>
+<span class="kn">import</span> <span class="nn">alsaaudio</span><span class="o">,</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">StreamReceiver</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">openconnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;192.168.0.205&#39;</span><span class="p">,</span><span class="mi">4321</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listener</span> <span class="o">=</span> <span class="n">Listener</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="n">authkey</span><span class="o">=</span><span class="s">&#39;abcdefg&#39;</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;[INIT] Opening connection on </span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listener</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;connection accepted&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openconnection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serve</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">conn</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s">&#39;TERMINATE&#39;</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;terminate received&#39;</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">)</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">break</span>
+
+            <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+    <span class="c"># process incoming data</span>
+    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&#39;OK&#39;</span>
+
+<span class="k">class</span> <span class="nc">StreamQ</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">buffer</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span> <span class="c">#use a FIFO queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BUFFER_SIZE</span> <span class="o">=</span> <span class="nb">buffer</span>
+
+    <span class="k">def</span> <span class="nf">addblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">block</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">nextblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">blocking</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">blocking</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">BUFFER_SIZE</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">qsize</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">BUFFER_SIZE</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;Q: filling buffer&quot;</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">qsize</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">AudioPlayer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setchannels</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setrate</span><span class="p">(</span><span class="mi">44100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setformat</span><span class="p">(</span><span class="n">alsaaudio</span><span class="o">.</span><span class="n">PCM_FORMAT_S32_LE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">setperiodsize</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">nextblock</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">nextblock</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">startserver</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">StreamReceiver</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c"># initialize audio output</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">alsaaudio</span><span class="o">.</span><span class="n">PCM</span><span class="p">(</span><span class="n">card</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">AudioPlayer</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">StreamQ</span><span class="p">()</span>
+
+    <span class="n">serverprocess</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">startserver</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,))</span>
+    <span class="n">serverprocess</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c"># fill buffer of queue with 50 blocks</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="c"># start playing</span>
+    <span class="n">player</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">q</span><span class="p">)</span></code></pre></div>
+
+<h4 id="source">Source</h4>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">import</span> <span class="nn">pyaudio</span>
+
+<span class="k">class</span> <span class="nc">StreamSender</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">addr</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;192.168.0.205&#39;</span><span class="p">,</span><span class="mi">4321</span><span class="p">),</span><span class="n">pw</span><span class="o">=</span><span class="s">&#39;abcdefg&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pw</span> <span class="o">=</span> <span class="n">pw</span>
+        <span class="k">print</span> <span class="n">pw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openconnection</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="n">pw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">openconnection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">addr</span><span class="p">,</span><span class="n">pw</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="n">authkey</span><span class="o">=</span><span class="n">pw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">conn</span>
+
+    <span class="k">def</span> <span class="nf">sendblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="k">print</span> <span class="n">resp</span>
+
+    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#39;TERMINATE&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">AudioReader</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocksize</span> <span class="o">=</span> <span class="mi">1024</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="n">pyaudio</span><span class="o">.</span><span class="n">paInt32</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frames_per_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">blocksize</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blocksize</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">audio</span> <span class="o">=</span> <span class="n">AudioReader</span><span class="p">()</span>
+
+    <span class="n">addr</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;192.168.0.205&#39;</span><span class="p">,</span><span class="mi">4321</span><span class="p">)</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="n">StreamSender</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">sender</span><span class="o">.</span><span class="n">sendblock</span><span class="p">(</span><span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></code></pre></div>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="http://localhost:4000/tutorials/Client-server-connection/" class="btn" title="Building a streaming service">Previous</a>
+      
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2015 Philip De Keulenaer. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/so-simple/" rel="nofollow">So Simple Theme</a>.</span>
+<div class="social-icons">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+  <a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'http://localhost:4000';
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+
+
+	        
+
+</body>
+</html>

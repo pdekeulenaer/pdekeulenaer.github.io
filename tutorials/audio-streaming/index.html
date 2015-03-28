@@ -5,15 +5,15 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
 <head>
 <meta charset="utf-8">
-<title>Page Not Found &#8211; Tinkering with an RPi</title>
-
-
+<title>Audio Streaming over WiFi &#8211; Tinkering with an RPi</title>
+<meta name="description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+<meta name="keywords" content="Raspberry-Pi, python, audio-stream">
 
 
 
 <!-- Twitter Cards -->
-<meta name="twitter:title" content="Page Not Found">
-
+<meta name="twitter:title" content="Audio Streaming over WiFi">
+<meta name="twitter:description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
 
 
 
@@ -23,16 +23,16 @@
 <!-- Open Graph -->
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Page Not Found">
-
-<meta property="og:url" content="http://localhost:4000/404.html">
+<meta property="og:title" content="Audio Streaming over WiFi">
+<meta property="og:description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+<meta property="og:url" content="http://localhost:4000/tutorials/audio-streaming/">
 <meta property="og:site_name" content="Tinkering with an RPi">
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/404.html">
+<link rel="canonical" href="http://localhost:4000/tutorials/audio-streaming/">
 <link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Tinkering with an RPi Feed">
 
 <!-- http://t.co/dKP3o1e -->
@@ -116,30 +116,63 @@
     
     <div class="entry-wrapper">
       <header class="entry-header">
-        <h1 class="entry-title">Page Not Found</h1>
+        <span class="entry-tags"><a href="http://localhost:4000/tags/#Raspberry-Pi" title="Pages tagged Raspberry-Pi">Raspberry-Pi</a>&nbsp;&bull;&nbsp;<a href="http://localhost:4000/tags/#python" title="Pages tagged python">python</a>&nbsp;&bull;&nbsp;<a href="http://localhost:4000/tags/#audio-stream" title="Pages tagged audio-stream">audio-stream</a></span>
+        
+          <h1 class="entry-title">Audio Streaming over WiFi</h1>
+        
       </header>
-	  <footer class="entry-meta">
+      <footer class="entry-meta">
         
         
         
           <img src="http://localhost:4000/images/bio-photo.jpg" class="bio-photo" alt="Philip De Keulenaer bio photo"></a>
         
         <span class="author vcard">By <span class="fn">Philip De Keulenaer</span></span>
+        <span class="entry-date date published"><time datetime="2015-03-01T00:00:00+01:00"><i class="fa fa-calendar-o"></i> March 01, 2015</time></span>
+        
+        
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Raspberry-Pi,python,audio-stream&amp;text=Audio%20Streaming%20over%20WiFi&amp;url=http://localhost:4000/tutorials/audio-streaming/" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/tutorials/audio-streaming/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=http://localhost:4000/tutorials/audio-streaming/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+        
       </footer>
       <div class="entry-content">
-        <p>Sorry, but the page you were trying to view does not exist — perhaps you can try searching for it below.</p>
+        <p>As many hobby programmers I am inherently lazy. One of the things that bothered me was that when I’m cooking in my kitchen, and I want to play music on my stereo, I had to run back and forth to change songs. This was because my stereo doesn’t have bluetooth support and I don’t want to run a 15m AUX cable through my appartment. Enter the Rpi! </p>
 
-<script type="text/javascript">
-  var GOOG_FIXURL_LANG = 'en';
-  var GOOG_FIXURL_SITE = 'http://localhost:4000'
-</script>
+<p>The solution was conceptually simple, I just stream whatever audio is playing on my computer to my rpi, which is permanently hooked up to my speakers. Sounds simple enough.</p>
 
-<script type="text/javascript" src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js">
-</script>
+<p>Unfortunately I did not find an “off-the-shelf” solution for this. There are quite a few projects out there that allow you to stream media on your rpi, controlled via your pc, but they almost always involve actually storing or transmitting <em>files</em>. This doesn’t work for me as I already stream my music from services like Soptify or Youtube.</p>
+
+<h3 id="the-solution">The solution</h3>
+<p>After a weekend of coding I managed to get a solution up and running. We will need a few things to get started.</p>
+
+<ol>
+  <li><a href="/tutorials/Capture-audio-on-windows-7-with-python/">A way to digitally capture the output on the streaming device</a> - I use VB Virtual Audio Cable for Windows 7 and pyAudio</li>
+  <li><a href="/tutorials/Client-server-connection/">A client/server connection between the streaming device and the rpi</a></li>
+  <li><a href="/tutorials/Playing-back-audiostream-on-raspberry-pi/">A music player on the rpi, I built mine on top of the alsaudio library</a></li>
+</ol>
+
+<hr />
 
 
+        
       </div><!-- /.entry-content -->
     </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="http://localhost:4000/tutorials/Rpi-temperature-sensor/" class="btn" title="Temperature Monitor">Previous</a>
+      
+      
+        <a href="http://localhost:4000/tutorials/Capture-audio-on-windows-7-with-python/" class="btn" title="Capture audio on windows 7 with python">Next</a>
+      
+    </nav><!-- /.pagination -->
   </article>
 </div><!-- /#main -->
 
@@ -172,7 +205,7 @@
 <script src="http://localhost:4000/assets/js/scripts.min.js"></script>
 
 
-          
+	        
 
 </body>
 </html>

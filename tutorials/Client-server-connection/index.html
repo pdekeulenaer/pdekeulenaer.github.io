@@ -1,0 +1,424 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Building a streaming service &#8211; Tinkering with an RPi</title>
+<meta name="description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+<meta name="keywords" content="Raspberry-Pi, python, audio-stream">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Building a streaming service">
+<meta name="twitter:description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/site-logo.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Building a streaming service">
+<meta property="og:description" content="Setting up a wifi stream from my laptop to my Rpi, to stream whatever audio is playing to my speaker system; using pyAudio, alsaudio and VB-Audio Virtual Cable.">
+<meta property="og:url" content="http://localhost:4000/tutorials/Client-server-connection/">
+<meta property="og:site_name" content="Tinkering with an RPi">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/tutorials/Client-server-connection/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Tinkering with an RPi Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+<!-- Webfonts -->
+<script src="//use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="http://localhost:4000/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="http://localhost:4000/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://localhost:4000/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav">
+	    <ul>
+      
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/" >Home</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/tutorials/" >Tutorials</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/knowledge/" >Knowledge</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/blog/" >Blog</a></li>
+		  
+		    
+		        
+		    
+		    <li><a href="http://localhost:4000/about/" >About</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<div class="js-menu-screen menu-screen"></div>
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <span class="entry-tags"><a href="http://localhost:4000/tags/#Raspberry-Pi" title="Pages tagged Raspberry-Pi">Raspberry-Pi</a>&nbsp;&bull;&nbsp;<a href="http://localhost:4000/tags/#python" title="Pages tagged python">python</a>&nbsp;&bull;&nbsp;<a href="http://localhost:4000/tags/#audio-stream" title="Pages tagged audio-stream">audio-stream</a></span>
+        
+          <h1 class="entry-title">Building a streaming service</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+        
+          <img src="http://localhost:4000/images/bio-photo.jpg" class="bio-photo" alt="Philip De Keulenaer bio photo"></a>
+        
+        <span class="author vcard">By <span class="fn">Philip De Keulenaer</span></span>
+        <span class="entry-date date published"><time datetime="2015-03-21T00:00:00+01:00"><i class="fa fa-calendar-o"></i> March 21, 2015</time></span>
+        
+        
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Raspberry-Pi,python,audio-stream&amp;text=Building%20a%20streaming%20service&amp;url=http://localhost:4000/tutorials/Client-server-connection/" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/tutorials/Client-server-connection/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=http://localhost:4000/tutorials/Client-server-connection/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+        
+      </footer>
+      <div class="entry-content">
+        <p>This tutorial is part of a three-fold series on how to create a music streamer between a windows device and a Raspberry Pi. The windows device captures any audio output, and sends it through to the RPi, who then plays it on it’s regular audio output.</p>
+
+<h3 id="the-architecture">The architecture</h3>
+<p>We will call the device connected to the final output, the <code>server</code>, in this case this is the RPi. The device generating the music that needs to be sent to the server, we will call the <code>source</code>. </p>
+
+<h4 id="communication">Communication</h4>
+<p>We will use the python <code>multiprocessing</code> library to setup the source-server interaction. </p>
+
+<p>In the previous tutorial we learnt how to capture audio through pyAudio. We will leverage this in the source, but read only 1 block of audio at the time. Every block we read, we will then send through to the server</p>
+
+<p>We then also need to build a receiver to accept incoming packets and process them . For this we use the aforementioned <code>multiprocessing</code> library’s <code>Listener</code> class</p>
+
+<h3 id="setting-up-the-communication-channel">Setting up the communication channel</h3>
+<p>In pseudo code we want to achieve something that looks like this</p>
+
+<pre><code># Source
+while true:
+	for each block in audiostream
+		send block to server
+
+# Server
+while true:
+	listen for block
+	add block to queue
+</code></pre>
+
+<h4 id="source">Source</h4>
+<p>The source part is the most straightforward, especially leveraging the <code>multiprocessing</code> framework. </p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="k">class</span> <span class="nc">StreamSender</span><span class="p">:</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">addr</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;192.168.0.xxx&#39;</span><span class="p">,</span><span class="mi">1234</span><span class="p">),</span><span class="n">pw</span><span class="o">=</span><span class="s">&#39;abcdefg&#39;</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">addr</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">pw</span> <span class="o">=</span> <span class="n">pw</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openconnection</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="n">pw</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">openconnection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">addr</span><span class="p">,</span><span class="n">pw</span><span class="p">):</span>
+		<span class="n">conn</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="n">authkey</span><span class="o">=</span><span class="n">pw</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">conn</span>
+
+	<span class="k">def</span> <span class="nf">sendblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+		<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+		<span class="k">print</span> <span class="n">resp</span>
+	
+	<span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#39;TERMINATE&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+
+<p>From the <code>multiprocessing</code> library we import the <code>Client</code> class, which allows us to setup a connection to a server. For that we need to include and <code>address</code> tuple, which contains the <code>host</code> (<code>192.168.0.xxx</code>) and a <code>port</code>. To make it secure we also add a password. It goes without saying that the host and port should refer to the server, and the password on both must be the same.</p>
+
+<p>Once the Client object is made we have a <code>connection</code>. This we can use to send and receive messages. We will implement a synchronized communication protocol, as you can see in the <code>sendblock</code> method. After sending a block, it will halt and wait for a response from the server. We need to take this into account when building the server later on.</p>
+
+<h4 id="server">Server</h4>
+<p>Before we can test our source we need a server to accept the messages. Let’s build one here, again using the <code>multiprocessing</code> library.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Listener</span>
+
+<span class="k">class</span> <span class="nc">StreamReceiver</span><span class="p">:</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+	<span class="k">def</span> <span class="nf">openconnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">address</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span><span class="mi">1234</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">listener</span> <span class="o">=</span> <span class="n">Listener</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="n">authkey</span><span class="o">=</span><span class="s">&#39;abcdefg&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listener</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span>
+
+	<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openconnection</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">serve</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>		
+
+	<span class="k">def</span> <span class="nf">serve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">conn</span><span class="p">):</span>
+		<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+			<span class="n">msg</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s">&#39;TERMINATE&#39;</span><span class="p">:</span>
+				<span class="k">print</span> <span class="s">&#39;terminate received&#39;</span>
+				<span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">)</span>
+				<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+				<span class="k">break</span>
+			
+			<span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+			<span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+	<span class="c"># process incoming data</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">msg</span><span class="p">):</span>
+		<span class="k">print</span> <span class="n">msg</span>
+		<span class="k">return</span> <span class="s">&#39;OK&#39;</span></code></pre></div>
+
+<p>The <code>openconnection</code> method opens a connection (not surprisingly), and uses the <code>Listener</code> class to wait on an incoming connection. In the setup here we provide the same parameters as the ones specified in the source.</p>
+
+<p>The method <code>self.listener.accept()</code> will wait for an incoming connection. This is a blocking method, so as long as there is no incoming connection request (from our source), nothing will happen. Hence it is clear that <strong>we need to start the server before starting the source</strong></p>
+
+<p>At the heart of the class lies the <code>serve</code> method, which will continuously wait for new messages from the source, and send them to the <code>dispatch</code> method. Later on we will need to improve this one, to properly handle the music blocks. Note that after each received message, we send a response back (in this case just ‘OK’). We have to do this because we chose for a synchronous implementation before, when setting up the source.</p>
+
+<p>Additionally, we check to see if we got a <code>TERMINATE</code> message. In that case we confirm to the sender, and exit the serving process. </p>
+
+<p>Let’s test it with the following script</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
+
+<span class="k">class</span> <span class="nc">StreamReceiver</span><span class="p">:</span>
+	<span class="c">#see implementation earlier</span>
+
+<span class="k">class</span> <span class="nc">StreamSender</span><span class="p">:</span>
+	<span class="c">#see implementation earlier</span>
+
+<span class="k">def</span> <span class="nf">startserver</span><span class="p">():</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">StreamReceiver</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">serverprocess</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">startserver</span><span class="p">)</span>
+    <span class="n">serverprocess</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="n">sender</span> <span class="o">=</span> <span class="n">StreamSender</span><span class="p">((</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span><span class="mi">1234</span><span class="p">))</span>
+
+    <span class="n">sender</span><span class="o">.</span><span class="n">sendblock</span><span class="p">(</span><span class="s">&#39;THIS IS A MESSAGE&#39;</span><span class="p">)</span>
+    <span class="n">sender</span><span class="o">.</span><span class="n">sendblock</span><span class="p">(</span><span class="s">&#39;THIS IS ANOTHER MESSAGE&#39;</span><span class="p">)</span>
+    <span class="n">sender</span><span class="o">.</span><span class="n">sendblock</span><span class="p">(</span><span class="s">&#39;MESSAGING IS FUN&#39;</span><span class="p">)</span>
+    <span class="n">sender</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span></code></pre></div>
+
+<p>The output will then look something like</p>
+
+<pre><code>THIS IS A MESSAGE
+OK
+THIS IS ANOTHER MESSAGE
+OK
+MESSAGING IS FUN
+OK
+terminate received
+</code></pre>
+
+<p>Now that we have this working, submitting music frames becomes trivial.</p>
+
+<h3 id="transfering-music-files">Transfering music files</h3>
+
+<p>Let’s take back the pyAudio recorder we built in the previous tutorial, and change it slightly.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pyaudio</span>
+<span class="kn">import</span> <span class="nn">wave</span>
+
+<span class="c"># configure the sound</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">RATE</span> <span class="o">=</span> <span class="mi">44100</span>
+<span class="n">BUFFERSIZE</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">CHANNELS</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">FORMAT</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">paInt32</span>
+<span class="n">SAMPLESIZE</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">get_sample_size</span><span class="p">(</span><span class="n">FORMAT</span><span class="p">)</span>
+
+<span class="c"># setup pyaudio</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+	<span class="n">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">,</span>
+	<span class="n">channels</span><span class="o">=</span><span class="n">CHANNELS</span><span class="p">,</span>
+	<span class="n">rate</span><span class="o">=</span><span class="n">RATE</span><span class="p">,</span>
+	<span class="nb">input</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+	<span class="n">frames_per_buffer</span><span class="o">=</span><span class="n">BUFFERSIZE</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Audio initialized, commencing recording&quot;</span>
+
+<span class="c"># read the frames</span>
+<span class="n">buffers</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">RATE</span> <span class="o">/</span> <span class="n">BUFFERSIZE</span> <span class="o">*</span> <span class="n">TIME</span><span class="p">)):</span>
+	<span class="n">bfr</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">BUFFERSIZE</span><span class="p">)</span></code></pre></div>
+
+<p>As you can see in the for loop at the end (the writing to a .wav file has been omitted), this script simply reads buffers of a particular size, from the audiostream.</p>
+
+<p>Let’s reshuffle this in a class</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pyaudio</span>
+
+<span class="k">class</span> <span class="nc">AudioReader</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocksize</span> <span class="o">=</span> <span class="mi">1024</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="n">pyaudio</span><span class="o">.</span><span class="n">paInt32</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frames_per_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">blocksize</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blocksize</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span></code></pre></div>
+
+<p>Now we can use the <code>AudioReader.read()</code> method to read a new block from the audiostream, which we can then submit.</p>
+
+<p>Let’s include that in our script from before and see what happens</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Listener</span><span class="p">,</span><span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">import</span> <span class="nn">pyaudio</span>
+
+<span class="k">class</span> <span class="nc">StreamSender</span><span class="p">:</span>
+	<span class="c"># defined before</span>
+
+<span class="k">class</span> <span class="nc">StreamReceiver</span><span class="p">:</span>
+	<span class="c"># defined before</span>
+
+
+<span class="k">class</span> <span class="nc">AudioReader</span><span class="p">:</span>
+	<span class="c"># defined before</span>
+
+<span class="k">def</span> <span class="nf">startserver</span><span class="p">():</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">StreamReceiver</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">audio</span> <span class="o">=</span> <span class="n">AudioReader</span><span class="p">((</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span><span class="mi">1234</span><span class="p">))</span>
+
+    <span class="n">serverprocess</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">startserver</span><span class="p">)</span>
+    <span class="n">serverprocess</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="n">sender</span> <span class="o">=</span> <span class="n">StreamSender</span><span class="p">()</span>
+
+    <span class="n">sender</span><span class="o">.</span><span class="n">sendblock</span><span class="p">(</span><span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="n">sender</span><span class="o">.</span><span class="n">sendblock</span><span class="p">(</span><span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+    <span class="n">sender</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span></code></pre></div>
+
+<p>If you run it you will see a bunch of jibberish in your terminal, this is normal, these are effectively 1024 bytes of noise recorded through pyAudio, displayed in your terminal. Note that some of these bytes may cause some mayhem in your terminal, to be on the safe side you can wrap a <code>str()</code> around the <code>audio.read()</code> calls for testing purposes.</p>
+
+<h3 id="so-whats-next">So what’s next?</h3>
+
+<p>So far we have a way to record audio from the source device, we can send it to a server device; but we can’t properly play it back yet.</p>
+
+<p>In the next tutorial we will build a Queue to gather the input blocks, and use the <code>alsaudio</code> library to play it on the RPi!</p>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="http://localhost:4000/tutorials/Capture-audio-on-windows-7-with-python/" class="btn" title="Capture audio on windows 7 with python">Previous</a>
+      
+      
+        <a href="http://localhost:4000/tutorials/Playing-back-audiostream-on-raspberry-pi/" class="btn" title="Playing back audio on Raspberry Pi using alsaudio">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2015 Philip De Keulenaer. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/so-simple/" rel="nofollow">So Simple Theme</a>.</span>
+<div class="social-icons">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+  <a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'http://localhost:4000';
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+
+
+	        
+
+</body>
+</html>
